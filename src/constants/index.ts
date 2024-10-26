@@ -6,7 +6,9 @@ export const states = {
     DASH_RIGHT: 4,
     DASH_LEFT: 5,
     JUMPING_RIGHT: 6,
-    JUMPING_LEFT: 7
+    JUMPING_LEFT: 7,
+    FALLING_RIGHT: 8,
+    FALLING_LEFT: 9
 }
 
 export const keys = {

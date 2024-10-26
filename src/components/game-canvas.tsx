@@ -8,7 +8,7 @@ export function GameCanvas({canvasRef}:{canvasRef: LegacyRef<HTMLCanvasElement>}
         <button className="right-1 top-1 h-[16px] w-[16px] border-2 absolute" onClick={()=>setToggleSize(!toggleSize)}>
 
         </button>
-        <canvas ref={canvasRef} width={toggleSize?1280:420} height={toggleSize?720:200} className="w-full h-full">
+        <canvas ref={canvasRef} width={toggleSize?1280:720} height={toggleSize?720:420} className="w-full h-full">
         </canvas>
     </div>
 }
