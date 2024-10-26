@@ -72,13 +72,13 @@ export class Player {
             x: 0,
             y: 0
         }
-        this.weight = 1
+        this.weight = 0.5
         this.input = new InputHandler()
         this.image = new Image()
         this.image.src = src
         this.maxSpeed = {
             x: 3,
-            y: 15
+            y: 8
         }
         this.spriteHeight = spriteHeight
         this.spriteWidth = spriteWidth
@@ -113,7 +113,7 @@ export class Player {
         }
     }
     get isOnGround() {
-        return (this.y >= 210 - this.height && this.x>200 && this.height && this.x<500-this.width )
+        return (this.y >= 210 - this.height && this.x>200 && this.height && this.x<500-this.width-10 )
     }
     get frame() {
         return {
@@ -126,8 +126,8 @@ export class Naruto extends Player {
     constructor({ game }: { game: Game }) {
         super({
             game,
-            height: 40,
-            width: 35,
+            height: 35,
+            width: 30,
             src: "/sprites/naruto/sheet.png",
             spriteHeight: 100,
             spriteWidth: 100,
