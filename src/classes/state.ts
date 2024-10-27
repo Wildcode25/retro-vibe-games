@@ -68,18 +68,17 @@ export class WalkingRight extends State{
     }
     handleInput(input: string){
         if(input === keys.RELEASE_RIGHT)
-            return this.player.setState(states.STANDING_RIGHT)
+             this.player.setState(states.STANDING_RIGHT)
         if(input === keys.PRESS_LEFT) 
-            return this.player.setState(states.WALKING_LEFT)
+             this.player.setState(states.WALKING_LEFT)
         if(input === keys.PRESS_BUTTON_C)
-            return this.player.setState(states.DASH_RIGHT)
+             this.player.setState(states.DASH_RIGHT)
         if(input === keys.PRESS_UP) 
-            return this.player.setState(states.JUMPING_RIGHT)
+             this.player.setState(states.JUMPING_RIGHT)
         if(this.player.velocity.y>this.player.weight) this.player.setState(states.FALLING_RIGHT)
 
     }
     enter(){
-        this.player.velocity.x = this.player.maxSpeed.x
         if(this.player.isOnGround){
 
             this.player.frameY = 2
@@ -97,19 +96,18 @@ export class WalkingLeft extends State{
     }
     handleInput(input: string){
         if(input === keys.RELEASE_LEFT)
-            return this.player.setState(states.STANDING_LEFT)
+             this.player.setState(states.STANDING_LEFT)
         if(input===keys.PRESS_RIGHT) 
-            return this.player.setState(states.WALKING_RIGHT)
+             this.player.setState(states.WALKING_RIGHT)
         if(input === keys.PRESS_BUTTON_C)
-            return this.player.setState(states.DASH_LEFT)
+             this.player.setState(states.DASH_LEFT)
         if(input === keys.PRESS_UP) 
-            return this.player.setState(states.JUMPING_LEFT)
+             this.player.setState(states.JUMPING_LEFT)
         if(this.player.velocity.y>this.player.weight) this.player.setState(states.FALLING_LEFT)
 
         
     }
     enter(){
-        this.player.velocity.x = -this.player.maxSpeed.x
         if(this.player.isOnGround){
 
             this.player.frameY = 3
@@ -128,16 +126,16 @@ export class DashRight extends State{
     handleInput(input: string){
         if(this.player.velocity.y>this.player.weight) return this.player.setState(states.FALLING_RIGHT)
         if(input === keys.RELEASE_BUTTON_C)
-            return this.player.setState(states.WALKING_RIGHT)
+             this.player.setState(states.WALKING_RIGHT)
         if(input === keys.PRESS_LEFT)
-            return this.player.setState(states.WALKING_LEFT)
+             this.player.setState(states.WALKING_LEFT)
         if(input === keys.PRESS_UP) 
-            return this.player.setState(states.JUMPING_RIGHT)
+             this.player.setState(states.JUMPING_RIGHT)
 
         
     }
     enter(){
-        this.player.velocity.x = this.player.maxSpeed.x*2
+        this.player.velocity.x = this.player.maxSpeed.x*1.5
         if(this.player.isOnGround){
 
             this.player.frameY = 4
@@ -155,19 +153,19 @@ export class DashLeft extends State{
     }
     handleInput(input: string){
         if(input === keys.RELEASE_LEFT)
-            return this.player.setState(states.STANDING_LEFT)
+             this.player.setState(states.STANDING_LEFT)
         if(input === keys.RELEASE_BUTTON_C)
              this.player.setState(states.WALKING_LEFT)
         if(input === keys.PRESS_RIGHT) 
             this.player.setState(states.WALKING_RIGHT)   
         if(input === keys.PRESS_UP) 
-           return  this.player.setState(states.JUMPING_LEFT)
+             this.player.setState(states.JUMPING_LEFT)
         if(this.player.velocity.y>this.player.weight) this.player.setState(states.FALLING_LEFT)
 
         
     }
     enter(){
-        this.player.velocity.x = -this.player.maxSpeed.x*2
+        this.player.velocity.x = -this.player.maxSpeed.x*1.5
         if(this.player.isOnGround){
 
             this.player.frameY = 5
@@ -196,9 +194,9 @@ export class JumpingRight extends State{
         if((this.player.jumps>0 && this.player.velocity.y >= this.player.weight) || this.player.isOnGround){
             this.player.jumps--
             this.player.velocity.y = -this.player.maxSpeed.y
+            this.player.frameY = 6
+            this.player.maxFrames = this.player.maxFramesArray[states.JUMPING_RIGHT]
         }  
-        this.player.frameY = 6
-        this.player.maxFrames = this.player.maxFramesArray[states.JUMPING_RIGHT]
 
     }
 }
@@ -222,9 +220,9 @@ export class JumpingLeft extends State{
         if((this.player.jumps>0 && this.player.velocity.y >= this.player.weight) || this.player.isOnGround){
             this.player.jumps--
             this.player.velocity.y = -this.player.maxSpeed.y
+            this.player.frameY = 7
+            this.player.maxFrames = this.player.maxFramesArray[states.JUMPING_LEFT]
         }  
-        this.player.frameY = 7
-        this.player.maxFrames = this.player.maxFramesArray[states.JUMPING_LEFT]
 
 
     }

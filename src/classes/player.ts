@@ -111,6 +111,7 @@ export class Player {
         
     }
     update(input: string, deltaTime: number) {
+        this.currentState.handleInput(input)
         this.x += this.velocity.x
         this.y += this.velocity.y
         if (this.isOnGround) {
@@ -126,10 +127,15 @@ export class Player {
             this.frameTimer=0
         }else this.frameTimer+=deltaTime
         if(input===keys.PRESS_RIGHT)  this.velocity.x = this.maxSpeed.x      
-        else if(input === keys.PRESS_LEFT) this.velocity.x = -this.maxSpeed.x
-        else if(input===keys.RELEASE_LEFT || input === keys.RELEASE_RIGHT) this.velocity.x = 0
-        this.currentState.handleInput(input)
+        if(input === keys.PRESS_LEFT) this.velocity.x = -this.maxSpeed.x
+        else if((input===keys.RELEASE_LEFT &&this.isMovingToLeft)  || (input === keys.RELEASE_RIGHT&&this.isMovingToRight)) this.velocity.x = 0
 
+    }
+    get isMovingToLeft(){
+        return this.velocity.x<0
+    }
+    get isMovingToRight(){
+        return this.velocity.x>0
     }
     get isOnGround() {
         return (this.y >= 210 - this.height && this.x>200 && this.height && this.x<500-this.width-10 )
