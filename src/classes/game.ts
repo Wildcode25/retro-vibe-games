@@ -15,9 +15,7 @@ export class Game{
     width: number
     height: number
     input: InputHandler
-    fps: number
-    frameInterval: number
-    frameTimer: number
+   
     constructor({character, enemies=[], friends=[], width, height}: Props){
         
         this.player = selectCharacter(character, this)
@@ -26,16 +24,12 @@ export class Game{
         this.height =  height
         this.friends = friends
         this.input = new InputHandler()
-        this.fps = 30
-        this.frameTimer = 0
-        this.frameInterval = 1000/this.fps
+      
     }
-    update(){
-        this.player.update(this.input.lastKey)
+    update(deltaTime: number){
+        this.player.update(this.input.lastKey, deltaTime)
     }
-    draw(ctx: CanvasRenderingContext2D, deltaTime: number){
-        if(this.frameTimer>this.frameInterval){
-            ctx.clearRect(0, 0, this.width, this.height)
+    draw(ctx: CanvasRenderingContext2D){
             const background  = new Image()
             background.src = '/sprites/stages/brawlhaven/BG_Brawlhaven.png'
             ctx.drawImage(background, 0, 0, 2048, 1151, 0, 0, this.width, this.height)
@@ -46,9 +40,8 @@ export class Game{
             platform2.src = '/sprites/stages/brawlhaven/Platform_BH4B.png'
             ctx.drawImage(platform2, 100, 0, 1000, 827, 180+160, 200-2, 150, 150)
             this.player.draw(ctx)
-            this.frameTimer = 0
-        }else 
-            this.frameTimer+=deltaTime
+            
+        
 
    }
    

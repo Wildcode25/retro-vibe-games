@@ -9,12 +9,11 @@ export function useGame(game: Game){
             if(ctx){
                
                 const animate = (timeStamp: number)=>{
+                    ctx.clearRect(0, 0, game.width, game.height)
                     const deltaTime = timeStamp-lastTime
                     lastTime=timeStamp
-                    game.update()
-                    
-                    game.draw(ctx, deltaTime)
-                    
+                    game.update(deltaTime)
+                    game.draw(ctx)
                     requestAnimationFrame(animate)
                 }
                 animate(0)

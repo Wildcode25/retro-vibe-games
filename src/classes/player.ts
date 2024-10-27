@@ -1,7 +1,8 @@
 import { StateType } from "@/constants/types";
 import { Game } from "./game";
 import { InputHandler } from "./inputHandler";
-import { DashLeft, DashRight, JumpingLeft, JumpingRight, StandingLeft, StandingRight, WalkingLeft, WalkingRight } from "./state";
+import { DashLeft, DashRight, FallingLeft, FallingRight, JumpingLeft, JumpingRight, StandingLeft, StandingRight, WalkingLeft, WalkingRight } from "./state";
+import { keys } from "@/constants";
 
 interface Props {
     game: Game,
@@ -46,6 +47,10 @@ export class Player {
     characterWidth: number
     characterHeight: number
     maxFramesArray: number[]
+    fps: number
+    frameInterval: number
+    frameTimer: number
+    jumps: number
     constructor({ game, height, width, src, spriteHeight, spriteWidth, maxFrames, characterHeight, characterWidth }: Props) {
         this.game = game
         this.height = height
@@ -62,9 +67,10 @@ export class Player {
             new StandingRight(this), new StandingLeft(this),
             new WalkingRight(this), new WalkingLeft(this),
             new DashRight(this), new DashLeft(this),
-            new JumpingRight(this), new JumpingLeft(this)
+            new JumpingRight(this), new JumpingLeft(this),
+            new FallingRight(this), new FallingLeft(this)
         ]
-        this.maxFramesArray = [12, 12, 8, 8, 6, 6, 2, 2, 2,2]
+        this.maxFramesArray = [11, 11, 7, 7, 5, 5, 1, 1,1,1]
         this.currentState = this.states[0]
         this.frameX = 0
         this.frameY = 0
@@ -72,6 +78,7 @@ export class Player {
             x: 0,
             y: 0
         }
+        this.jumps = 3
         this.weight = 0.5
         this.input = new InputHandler()
         this.image = new Image()
@@ -83,10 +90,12 @@ export class Player {
         this.spriteHeight = spriteHeight
         this.spriteWidth = spriteWidth
         this.maxFrames = maxFrames
+        this.fps = 30
+        this.frameTimer = 0
+        this.frameInterval = 1000/this.fps
     }
     draw(ctx: CanvasRenderingContext2D) {
-        if(this.frameX<this.maxFrames-1) this.frameX++
-        else this.frameX=0
+        
         ctx.strokeRect(this.x, this.y, this.width, this.height)
         ctx.drawImage(
             this.image, 
@@ -101,16 +110,26 @@ export class Player {
         this.currentState.enter()
         
     }
-    update(input: string) {
-        this.currentState.handleInput(input)
+    update(input: string, deltaTime: number) {
         this.x += this.velocity.x
         this.y += this.velocity.y
         if (this.isOnGround) {
-            this.y = 210 - this.height
+            this.jumps = 3
+            this.velocity.y = 0
         }
         else {
             this.velocity.y += this.weight
         }
+        if(this.frameTimer>this.frameInterval){
+            if(this.frameX<this.maxFrames) this.frameX++
+            else this.frameX=0
+            this.frameTimer=0
+        }else this.frameTimer+=deltaTime
+        if(input===keys.PRESS_RIGHT)  this.velocity.x = this.maxSpeed.x      
+        else if(input === keys.PRESS_LEFT) this.velocity.x = -this.maxSpeed.x
+        else if(input===keys.RELEASE_LEFT || input === keys.RELEASE_RIGHT) this.velocity.x = 0
+        this.currentState.handleInput(input)
+
     }
     get isOnGround() {
         return (this.y >= 210 - this.height && this.x>200 && this.height && this.x<500-this.width-10 )
