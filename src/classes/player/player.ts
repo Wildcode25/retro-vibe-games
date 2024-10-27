@@ -1,8 +1,17 @@
 import { StateType } from "@/constants/types";
-import { Game } from "./game";
-import { InputHandler } from "./inputHandler";
-import { DashLeft, DashRight, FallingLeft, FallingRight, JumpingLeft, JumpingRight, StandingLeft, StandingRight, WalkingLeft, WalkingRight } from "./state";
+import { Game } from "../game";
+import { InputHandler } from "../inputHandler";
 import { keys } from "@/constants";
+import { StandingRight } from "../state/standing/standing-right";
+import { StandingLeft } from "../state/standing/standing-left";
+import { WalkingRight } from "../state/walking/walking-right";
+import { WalkingLeft } from "../state/walking/walking-left";
+import { DashRight } from "../state/dashing/dashing-right";
+import { DashLeft } from "../state/dashing/dashing-left";
+import { JumpingLeft } from "../state/jumping/jumping-left";
+import { JumpingRight } from "../state/jumping/jumping-right";
+import { FallingRight } from "../state/falling/falling-right";
+import { FallingLeft } from "../state/falling/falling-left";
 
 interface Props {
     game: Game,
@@ -12,8 +21,11 @@ interface Props {
     spriteWidth: number,
     spriteHeight: number,
     maxFrames: number,
-    characterWidth: number,
-    characterHeight: number
+    maxFramesArray: number[],
+    framesSize: {
+        width: number,
+        height: number
+    }[]
 }
 
 export class Player {
@@ -51,18 +63,13 @@ export class Player {
     frameInterval: number
     frameTimer: number
     jumps: number
-    constructor({ game, height, width, src, spriteHeight, spriteWidth, maxFrames, characterHeight, characterWidth }: Props) {
+    framesSize: Props['framesSize']
+    constructor({framesSize, maxFramesArray, game, height, width, src, spriteHeight, spriteWidth}: Props) {
         this.game = game
         this.height = height
         this.width = width
         this.y = 0
         this.x = 210
-        this.characterWidth = characterWidth
-        this.characterHeight = characterHeight
-        this.padding = {
-            x: (spriteWidth - this.characterWidth) / 2,
-            y: (spriteHeight - this.characterHeight) / 2
-        }
         this.states = [
             new StandingRight(this), new StandingLeft(this),
             new WalkingRight(this), new WalkingLeft(this),
@@ -70,7 +77,7 @@ export class Player {
             new JumpingRight(this), new JumpingLeft(this),
             new FallingRight(this), new FallingLeft(this)
         ]
-        this.maxFramesArray = [11, 11, 7, 7, 5, 5, 1, 1,1,1]
+        this.maxFramesArray = maxFramesArray
         this.currentState = this.states[0]
         this.frameX = 0
         this.frameY = 0
@@ -89,10 +96,17 @@ export class Player {
         }
         this.spriteHeight = spriteHeight
         this.spriteWidth = spriteWidth
-        this.maxFrames = maxFrames
+        this.maxFrames = this.maxFramesArray[0]
         this.fps = 30
         this.frameTimer = 0
         this.frameInterval = 1000/this.fps
+        this.framesSize = framesSize
+        this.characterWidth = this.framesSize[0].width
+        this.characterHeight = this.framesSize[0].height
+        this.padding = {
+            x: (spriteWidth - this.characterWidth) / 2,
+            y: (spriteHeight - this.characterHeight) / 2
+        }
     }
     draw(ctx: CanvasRenderingContext2D) {
         
@@ -106,9 +120,11 @@ export class Player {
     }
     setState(stateIndex: number) {
         this.currentState = this.states[stateIndex]
-        console.log(this.currentState.state)
         this.currentState.enter()
+        this.characterWidth = this.framesSize[stateIndex].width
+        this.characterHeight = this.framesSize[stateIndex].height
         
+        console.log(this.currentState.state)
     }
     update(input: string, deltaTime: number) {
         this.currentState.handleInput(input)
@@ -126,10 +142,17 @@ export class Player {
             else this.frameX=0
             this.frameTimer=0
         }else this.frameTimer+=deltaTime
-        if(input===keys.PRESS_RIGHT)  this.velocity.x = this.maxSpeed.x      
-        if(input === keys.PRESS_LEFT) this.velocity.x = -this.maxSpeed.x
-        else if((input===keys.RELEASE_LEFT &&this.isMovingToLeft)  || (input === keys.RELEASE_RIGHT&&this.isMovingToRight)) this.velocity.x = 0
-
+        if(input===keys.PRESS_RIGHT)
+            this.velocity.x = this.maxSpeed.x      
+         
+        else if(input === keys.PRESS_LEFT)
+            this.velocity.x = -this.maxSpeed.x
+         
+        else if(
+            (input===keys.RELEASE_LEFT &&this.isMovingToLeft)  || 
+            (input === keys.RELEASE_RIGHT&&this.isMovingToRight) 
+        ) this.velocity.x = 0
+        
     }
     get isMovingToLeft(){
         return this.velocity.x<0
@@ -145,21 +168,5 @@ export class Player {
             x: this.spriteWidth*this.frameX+this.padding.x,
             y: this.spriteHeight*this.frameY+this.padding.y
         }
-    }
-}
-export class Naruto extends Player {
-    constructor({ game }: { game: Game }) {
-        super({
-            game,
-            height: 35,
-            width: 30,
-            src: "/sprites/naruto/sheet.png",
-            spriteHeight: 100,
-            spriteWidth: 100,
-            maxFrames: 11,
-            characterHeight: 50,
-            characterWidth: 45
-        })
-
     }
 }

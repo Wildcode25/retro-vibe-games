@@ -1,5 +1,5 @@
 import { InputHandler } from "./inputHandler"
-import { Player } from "./player"
+import { Player } from "./player/player"
 import { selectCharacter } from "@/utils/selectCharacter"
 interface Props{
     character: string
