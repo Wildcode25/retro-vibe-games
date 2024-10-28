@@ -17,9 +17,9 @@ export class JumpingRight extends State{
         if((this.player.jumps>0 && this.player.velocity.y >= this.player.weight) || this.player.isOnGround){
             this.player.jumps--
             this.player.velocity.y = -this.player.maxSpeed.y
-            this.player.frameY = 6
-            this.player.maxFrames = this.player.maxFramesArray[states.JUMPING_RIGHT]
         }  
+        this.player.frameY = 6
+        this.player.maxFrames = this.player.maxFramesArray[states.JUMPING_RIGHT]
 
     }
 }

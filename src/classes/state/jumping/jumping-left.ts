@@ -19,9 +19,9 @@ export class JumpingLeft extends State{
         if((this.player.jumps>0 && this.player.velocity.y >= this.player.weight) || this.player.isOnGround){
             this.player.jumps--
             this.player.velocity.y = -this.player.maxSpeed.y
-            this.player.frameY = 7
-            this.player.maxFrames = this.player.maxFramesArray[states.JUMPING_LEFT]
         }  
+        this.player.frameY = 7
+        this.player.maxFrames = this.player.maxFramesArray[states.JUMPING_LEFT]
 
 
     }

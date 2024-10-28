@@ -19,12 +19,10 @@ export class StandingLeft extends State{
 
     }
     enter(){
-        if(
-            this.player.isOnGround
-        ){
+        
             this.player.maxFrames = this.player.maxFramesArray[states.STANDING_LEFT]
             this.player.frameY = 1
-        }
+        
 
     }
 }

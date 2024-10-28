@@ -23,11 +23,10 @@ export class DashLeft extends State{
     }
     enter(){
         this.player.velocity.x = -this.player.maxSpeed.x*1.5
-        if(this.player.isOnGround){
 
             this.player.frameY = 5
             this.player.maxFrames = this.player.maxFramesArray[states.DASH_LEFT]
-        }
+        
 
     }
 }

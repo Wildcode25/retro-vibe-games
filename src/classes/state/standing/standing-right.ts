@@ -19,11 +19,9 @@ export class StandingRight extends State{
         if(this.player.isOnGround) this.player.setState(states.STANDING_RIGHT)
     }
     enter(){
-        if(
-            this.player.isOnGround
-        ){
+      
             this.player.maxFrames = this.player.maxFramesArray[states.STANDING_LEFT]
             this.player.frameY = 0
-        }
+        
     }
 }

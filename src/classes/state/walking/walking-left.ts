@@ -17,17 +17,15 @@ export class WalkingLeft extends State{
              this.player.setState(states.DASH_LEFT)
         if(input === keys.PRESS_UP) 
              this.player.setState(states.JUMPING_LEFT)
-        if(this.player.velocity.y>this.player.weight) this.player.setState(states.FALLING_LEFT)
+        if(this.player.velocity.y>this.player.weight) 
+            this.player.setState(states.FALLING_LEFT)
 
         
     }
     enter(){
-        this.player.velocity.x = -this.player.maxSpeed
-        if(this.player.isOnGround){
 
             this.player.frameY = 3
             this.player.maxFrames = this.player.maxFramesArray[states.WALKING_LEFT]
-        }
 
 
     }
